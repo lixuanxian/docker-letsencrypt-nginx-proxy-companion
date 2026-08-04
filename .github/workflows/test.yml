@@ -99,6 +99,7 @@ jobs:
             certs_renew_after,
             certs_default_renew_deprecated,
             cert_profiles,
+            certs_ip,
             force_renew,
             acme_accounts,
             private_keys,
@@ -123,6 +124,9 @@ jobs:
             setup: 2containers
             pebble-config: pebble-config.json
           - test-name: standalone_ipv6
+            setup: 2containers
+            pebble-config: pebble-config.json
+          - test-name: certs_ip_validation
             setup: 2containers
             pebble-config: pebble-config.json
           - test-name: docker_api_tls
