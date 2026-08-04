@@ -9,6 +9,7 @@ ACME_CA_TEST_URI="https://acme-staging-v02.api.letsencrypt.org/directory"
 DEFAULT_KEY_SIZE="${DEFAULT_KEY_SIZE:-4096}"
 RENEW_PRIVATE_KEYS="$(lc "${RENEW_PRIVATE_KEYS:-true}")"
 ACME_RENEW_AFTER="${ACME_RENEW_AFTER:-60}"
+ACME_RENEW_AFTER_IP="${ACME_RENEW_AFTER_IP:-3}"
 
 # Backward compatibility environment variable
 REUSE_PRIVATE_KEYS="$(lc "${REUSE_PRIVATE_KEYS:-false}")"
@@ -495,6 +496,9 @@ function update_cert {
     elif [[ -n ${ACME_CERT_PROFILE// } ]]; then
         # Use default certificate profile
         params_issue_arr+=(--cert-profile "${ACME_CERT_PROFILE}")
+    elif [[ "${ip_certificate}" == 'true' ]]; then
+        # Let's Encrypt requires the shortlived profile for IP address certificates
+        params_issue_arr+=(--cert-profile shortlived)
     fi
 
     # acme.sh pre and post hooks
@@ -547,7 +551,11 @@ function update_cert {
     # Allow to override day to renew cert (per-container or global)
     local -n renew_after="ACME_${cid}_RENEW_AFTER"
     if [[ -z "${renew_after}" ]] || [[ ! "${renew_after}" =~ ^[0-9]+$ ]]; then
-        renew_after="${ACME_RENEW_AFTER}"
+        if [[ "${ip_certificate}" == 'true' ]]; then
+            renew_after="${ACME_RENEW_AFTER_IP}"
+        else
+            renew_after="${ACME_RENEW_AFTER}"
+        fi
     fi
     params_issue_arr+=(--days "${renew_after}")
 
