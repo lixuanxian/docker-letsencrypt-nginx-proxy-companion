@@ -31,6 +31,28 @@ for host in "${!expect_ip[@]}"; do
     echo "is_ip_address '${host}' returned ${actual}, expected ${expected}."
   fi
 done
+
+source /app/letsencrypt_service.sh --source-only
+
+ACME_mixed_HOST=('203.0.113.42' 'example.com')
+ACME_mixed_CHALLENGE=''
+mixed_output="$(update_cert mixed 2>&1)"
+mixed_rc=$?
+if [[ ${mixed_rc} -eq 0 ]]; then
+  echo "update_cert accepted a certificate mixing an IP address and a domain name, it should have rejected it."
+elif [[ "${mixed_output}" != *"cannot mix IP addresses and domain names"* ]]; then
+  echo "update_cert rejected the mixed IP/domain certificate for the wrong reason: ${mixed_output}"
+fi
+
+ACME_ipdns_HOST=('203.0.113.42')
+ACME_ipdns_CHALLENGE='DNS-01'
+ipdns_output="$(update_cert ipdns 2>&1)"
+ipdns_rc=$?
+if [[ ${ipdns_rc} -eq 0 ]]; then
+  echo "update_cert accepted a DNS-01 challenge for an IP address certificate, it should have rejected it."
+elif [[ "${ipdns_output}" != *"DNS-01 is not supported by Let's Encrypt for IP identifiers"* ]]; then
+  echo "update_cert rejected the IP+DNS-01 certificate for the wrong reason: ${ipdns_output}"
+fi
 EOF
 )"
 

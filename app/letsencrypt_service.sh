@@ -174,6 +174,27 @@ function update_cert {
         wildcard_certificate='true'
     fi
 
+    # Classify this certificate's hosts: Let's Encrypt IP address
+    # certificates have different requirements (HTTP-01/TLS-ALPN-01 only,
+    # shortlived profile) than domain certificates, and can't mix the two.
+    local -a ip_hosts=() dns_hosts=()
+    local host
+    for host in "${hosts_array[@]}"; do
+        if is_ip_address "${host}"; then
+            ip_hosts+=("${host}")
+        else
+            dns_hosts+=("${host}")
+        fi
+    done
+    local ip_certificate='false'
+    if [[ ${#ip_hosts[@]} -gt 0 ]]; then
+        ip_certificate='true'
+    fi
+    if [[ ${#ip_hosts[@]} -gt 0 && ${#dns_hosts[@]} -gt 0 ]]; then
+        echo "Error: cannot mix IP addresses and domain names in the same certificate (${base_domain}): IP(s) ${ip_hosts[*]}, domain(s) ${dns_hosts[*]}. Use ACME_SINGLE_DOMAIN_CERTS=true to split them into separate certificates."
+        return 1
+    fi
+
     local should_restart_container='false'
 
     # Base CLI parameters array, used for both --register-account and --issue
@@ -218,6 +239,10 @@ function update_cert {
         fi
         params_issue_arr+=(--webroot /usr/share/nginx/html)
     elif [[ "${acme_challenge}" == "DNS-01" ]]; then
+        if [[ "${ip_certificate}" == 'true' ]]; then
+            echo "Error: IP address certificates (${base_domain}) require the HTTP-01 or TLS-ALPN-01 challenge; DNS-01 is not supported by Let's Encrypt for IP identifiers."
+            return 1
+        fi
         # DNS-01 challenge
         local acmesh_dns_config_used='none'
         local acmesh_dns_sleep_value='none'
