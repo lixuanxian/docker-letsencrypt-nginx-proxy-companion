@@ -53,6 +53,28 @@ if [[ ${ipdns_rc} -eq 0 ]]; then
 elif [[ "${ipdns_output}" != *"DNS-01 is not supported by Let's Encrypt for IP identifiers"* ]]; then
   echo "update_cert rejected the IP+DNS-01 certificate for the wrong reason: ${ipdns_output}"
 fi
+
+mkdir -p '/etc/nginx/certs/2001:db8::1'
+echo 'dummy-fullchain' > '/etc/nginx/certs/2001:db8::1/fullchain.pem'
+echo 'dummy-key' > '/etc/nginx/certs/2001:db8::1/key.pem'
+create_links '2001:db8::1' '2001:db8::1'
+
+if [[ ! -L '/etc/nginx/certs/2001:db8::1.crt' ]]; then
+  echo "create_links did not create a certificate symlink for the IPv6 host 2001:db8::1."
+fi
+if [[ ! -L '/etc/nginx/certs/2001:db8::1.key' ]]; then
+  echo "create_links did not create a private key symlink for the IPv6 host 2001:db8::1."
+fi
+
+crt_target="$(readlink '/etc/nginx/certs/2001:db8::1.crt')"
+if [[ "${crt_target}" != './2001:db8::1/fullchain.pem' ]]; then
+  echo "The certificate symlink for the IPv6 host 2001:db8::1 points to ${crt_target} instead of ./2001:db8::1/fullchain.pem."
+fi
+
+crt_content="$(cat '/etc/nginx/certs/2001:db8::1.crt')"
+if [[ "${crt_content}" != 'dummy-fullchain' ]]; then
+  echo "The certificate symlink for the IPv6 host 2001:db8::1 does not resolve to the expected file content."
+fi
 EOF
 )"
 
