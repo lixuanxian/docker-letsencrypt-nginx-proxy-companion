@@ -12,6 +12,7 @@ globalTests+=(
 	certs_single_domain
 	certs_standalone
 	standalone_ipv6
+	certs_ip_validation
 	force_renew
 	acme_accounts
 	private_keys

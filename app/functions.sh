@@ -24,6 +24,30 @@ function parse_true() {
 	esac
 }
 
+function is_ipv4_address {
+	local -r host="${1?missing host argument}"
+	[[ "${host}" =~ ^[0-9]{1,3}(\.[0-9]{1,3}){3}$ ]] || return 1
+	local octet
+	for octet in ${host//./ }; do
+		(( octet <= 255 )) || return 1
+	done
+}
+
+function is_ip_address {
+	# Heuristic classifier used to select IP-certificate defaults, not a
+	# strict RFC validator: a false negative just means the automatic
+	# defaults (see letsencrypt_service.sh) don't kick in and the value is
+	# treated like a regular hostname. A false positive can't happen for a
+	# real domain name, since DNS labels never contain ':' and the IPv4
+	# check above requires exactly 4 dot-separated numeric octets. IPv6
+	# zone indices (e.g. fe80::1%eth0) are intentionally not recognized:
+	# link-local addresses aren't publicly routable and Let's Encrypt
+	# wouldn't issue a certificate for one anyway.
+	local -r host="${1?missing host argument}"
+	is_ipv4_address "${host}" && return 0
+	[[ "${host}" == *:* && "${host}" =~ ^[0-9A-Fa-f:]+$ ]]
+}
+
 [[ -z "${VHOST_DIR:-}" ]] && \
  declare -r VHOST_DIR=/etc/nginx/vhost.d
 [[ -z "${START_HEADER:-}" ]] && \
