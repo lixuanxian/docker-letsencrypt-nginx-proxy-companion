@@ -14,6 +14,7 @@
 | `ACME_POST_HOOK` | — | — | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) · [Hooks](./Hooks.md) |
 | `ACME_PRE_HOOK` | — | — | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) · [Hooks](./Hooks.md) |
 | `ACME_RENEW_AFTER` | `60` (days) | `DEFAULT_RENEW` ⚠️ deprecated | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) |
+| `ACME_RENEW_AFTER_IP` | `3` (days) | — | [IP address certificates › Automatic defaults](./IP-address-certificates.md#automatic-defaults) |
 | `CA_BUNDLE` | Alpine trust store | — | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) |
 | `CERTS_UPDATE_INTERVAL` | `3600` (seconds) | — | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) |
 | `CREATE_DEFAULT_CERTIFICATE` | `false` | — | [Let's Encrypt and ACME › Self signed default certificate](./Let's-Encrypt-and-ACME.md#self-signed-default-certificate) |

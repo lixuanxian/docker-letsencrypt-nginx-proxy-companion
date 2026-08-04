@@ -24,6 +24,8 @@
 
 [Standalone certificates](./Standalone-certificates.md)
 
+[IP address certificates](./IP-address-certificates.md)
+
 [Zero SSL](./Zero-SSL.md)
 
 [Pre-Hooks and Post-Hooks](./Hooks.md)
