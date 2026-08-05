@@ -1,0 +1,11 @@
+# Store all text files with LF in the repository, regardless of each
+# contributor's core.autocrlf setting, so shell scripts never end up with
+# CRLF shebangs that break inside the Linux image.
+#
+# Working-tree line endings still follow the platform (CRLF on Windows via
+# core.autocrlf), and the Dockerfile strips any CRLF at build time, so
+# building the image on Windows keeps working.
+* text=auto
+
+# Binary assets must never be line-ending normalized.
+*.png binary
