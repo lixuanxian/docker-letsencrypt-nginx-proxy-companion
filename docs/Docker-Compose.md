@@ -38,7 +38,7 @@ services:
       # - conf:/etc/nginx/conf.d
 
   acme-companion:
-    image: nginxproxy/acme-companion
+    image: kineviz/nginx-acme-companion
     container_name: nginx-proxy-acme
     environment:
       - DEFAULT_EMAIL=mail@yourdomain.tld
@@ -101,7 +101,7 @@ services:
       # - vhost:/etc/nginx/vhost.d
 
   acme-companion:
-    image: nginxproxy/acme-companion
+    image: kineviz/nginx-acme-companion
     container_name: nginx-proxy-acme
     environment:
       - DEFAULT_EMAIL=mail@yourdomain.tld

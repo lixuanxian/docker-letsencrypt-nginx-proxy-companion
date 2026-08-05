@@ -18,7 +18,7 @@ $ docker run --detach \
     --volume acme:/etc/acme.sh \
     --env "DEFAULT_EMAIL=mail@yourdomain.tld" \
     --env "ACME_PRE_HOOK=echo 'start'" \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 
 And on a proxied container (setting a per-container Pre-Hook):
@@ -43,7 +43,7 @@ $ docker run --detach \
     --volume acme:/etc/acme.sh \
     --env "DEFAULT_EMAIL=mail@yourdomain.tld" \
     --env "ACME_POST_HOOK=echo 'end'" \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 
 And on a proxied container (setting a per-container Post-Hook):

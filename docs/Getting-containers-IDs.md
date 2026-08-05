@@ -36,7 +36,7 @@ $ docker run --detach \
 
 $ docker run --detach \
     [...]
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 
 `environment variable` method
@@ -55,7 +55,7 @@ $ docker run --detach \
     [...]
     --env NGINX_PROXY_CONTAINER=unique-container-name \
     --env NGINX_DOCKER_GEN_CONTAINER=another-unique-container-name \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 
 `volumes_from` (**nginx**) + `label` (**docker-gen**) method
@@ -73,7 +73,7 @@ $ docker run --detach \
 $ docker run --detach \
     [...]
     --volumes-from unique-container-name \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 
 `volumes_from` (**nginx**) + `environment variable` (**docker-gen**) method
@@ -92,5 +92,5 @@ $ docker run --detach \
     [...]
     --volumes-from unique-container-name \
     --env NGINX_DOCKER_GEN_CONTAINER=another-unique-container-name \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```

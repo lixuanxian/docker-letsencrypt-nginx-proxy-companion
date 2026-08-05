@@ -16,7 +16,7 @@ In order to switch to the DNS-01 ACME challenge, set the `ACME_CHALLENGE` enviro
 
 When using the DNS-01 ACME challenge, you can optionally configure the time (in seconds) that acme.sh should wait for DNS TXT records to propagate before attempting validation. This is done by adding the (optional) `DNS_SLEEP` property to the `ACMESH_DNS_API_CONFIG` environment variable.
 
-The other properties required will depend on the DNS provider you are using. For more information on the required properties for each DNS provider, please refer to the [acme.sh documentation](https://github.com/acmesh-official/acme.sh/wiki/dnsapi) (please keep in mind that nginxproxy/acme-companion is using a fixed version of acme.sh, so the documentation might include DNS providers that are not yet available in the version used by this image).
+The other properties required will depend on the DNS provider you are using. For more information on the required properties for each DNS provider, please refer to the [acme.sh documentation](https://github.com/acmesh-official/acme.sh/wiki/dnsapi) (please keep in mind that kineviz/nginx-acme-companion is using a fixed version of acme.sh, so the documentation might include DNS providers that are not yet available in the version used by this image).
 
 Both `ACME_CHALLENGE` and `ACMESH_DNS_API_CONFIG` environment variables can also be set on the proxied application container, in which case they will override the values set on the acme-companion container, if any.
 
@@ -32,7 +32,7 @@ docker run --detach \
     --env "DEFAULT_EMAIL=mail@yourdomain.tld" \
     --env "ACME_CHALLENGE=DNS-01" \
     --env "ACMESH_DNS_API_CONFIG={'DNS_API': 'dns_cf', 'DNS_SLEEP': 900, 'CF_Key': 'yourCloudflareGlobalApiKey', 'CF_Email': 'yourCloudflareAccountEmail'}" \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 
 Same example on a Docker compose file:
@@ -41,7 +41,7 @@ services:
   # nginx proxy container omitted
     
   acme:
-    image: nginxproxy/acme-companion
+    image: kineviz/nginx-acme-companion
     container_name: nginx-proxy-acme
     volumes:
       - certs:/etc/nginx/certs

@@ -42,9 +42,7 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: |
-            ghcr.io/nginx-proxy/acme-companion
-            nginxproxy/acme-companion
-            jrcs/letsencrypt-nginx-proxy-companion
+            kineviz/nginx-acme-companion
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}

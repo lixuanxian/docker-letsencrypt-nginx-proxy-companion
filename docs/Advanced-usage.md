@@ -60,7 +60,7 @@ $ docker run --detach \
     --volume acme:/etc/acme.sh \
     --env "NGINX_DOCKER_GEN_CONTAINER=nginx-proxy-gen" \
     --env "DEFAULT_EMAIL=mail@yourdomain.tld" \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 
 ### Step 4 - proxied container(s)

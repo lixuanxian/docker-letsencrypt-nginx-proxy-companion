@@ -14,7 +14,7 @@ $ docker run --detach \
     --volume certs:/etc/nginx/certs:rw \
     --volume acme:/etc/acme.sh \
     --env "ACME_CA_URI=https://acme-staging-v02.api.letsencrypt.org/directory" \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 You can also create test certificates per container (see [Test certificates](./Let's-Encrypt-and-ACME.md#test-certificates))
 
@@ -64,5 +64,5 @@ You can also create test certificates per container (see [Test certificates](./L
         --env "DOCKER_HOST=tcp://docker-host.example.com:2376" \
         --env "DOCKER_TLS_VERIFY=true" \
         --env "DOCKER_CERT_PATH=/docker-certs" \
-        nginxproxy/acme-companion
+        kineviz/nginx-acme-companion
     ```

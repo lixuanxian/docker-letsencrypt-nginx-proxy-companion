@@ -25,6 +25,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN_RWD }}
-          repository: nginxproxy/acme-companion
+          repository: kineviz/nginx-acme-companion
           short-description: ${{ github.event.repository.description }}
           enable-url-completion: true

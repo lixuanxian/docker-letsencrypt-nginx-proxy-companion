@@ -22,7 +22,7 @@ $ docker run --detach \
     --volume /var/run/docker.sock:/var/run/docker.sock:ro \
     --volume acme:/etc/acme.sh \
     --volume /path/to/your/config_file:/app/letsencrypt_user_data:ro \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 
 The user configuration file is a collection of bash variables and array, and follows the syntax of the `/app/letsencrypt_service_data` file that get created by **docker-gen**.

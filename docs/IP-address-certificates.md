@@ -40,7 +40,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
   acme-companion:
-    image: nginxproxy/acme-companion
+    image: kineviz/nginx-acme-companion
     volumes_from:
       - nginx-proxy
     volumes:

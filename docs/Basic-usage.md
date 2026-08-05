@@ -39,7 +39,7 @@ $ docker run --detach \
     --volume /var/run/docker.sock:/var/run/docker.sock:ro \
     --volume acme:/etc/acme.sh \
     --env "DEFAULT_EMAIL=mail@yourdomain.tld" \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 
 The host docker socket has to be bound inside this container too, this time to `/var/run/docker.sock`.

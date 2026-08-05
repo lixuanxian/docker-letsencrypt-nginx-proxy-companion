@@ -20,9 +20,9 @@
 
 [![Tests](https://github.com/nginx-proxy/acme-companion/actions/workflows/test.yml/badge.svg)](https://github.com/nginx-proxy/acme-companion/actions/workflows/test.yml)
 [![GitHub release](https://img.shields.io/github/release/nginx-proxy/acme-companion.svg)](https://github.com/nginx-proxy/acme-companion/releases)
-[![Docker Image Size](https://img.shields.io/docker/image-size/nginxproxy/acme-companion?sort=semver)](https://hub.docker.com/r/nginxproxy/acme-companion "Click to view the image on Docker Hub")
-[![Docker stars](https://img.shields.io/docker/stars/nginxproxy/acme-companion.svg)](https://hub.docker.com/r/nginxproxy/acme-companion "Click to view the image on Docker Hub")
-[![Docker pulls](https://img.shields.io/docker/pulls/nginxproxy/acme-companion.svg)](https://hub.docker.com/r/nginxproxy/acme-companion "Click to view the image on Docker Hub")
+[![Docker Image Size](https://img.shields.io/docker/image-size/kineviz/nginx-acme-companion?sort=semver)](https://hub.docker.com/r/kineviz/nginx-acme-companion "Click to view the image on Docker Hub")
+[![Docker stars](https://img.shields.io/docker/stars/kineviz/nginx-acme-companion.svg)](https://hub.docker.com/r/kineviz/nginx-acme-companion "Click to view the image on Docker Hub")
+[![Docker pulls](https://img.shields.io/docker/pulls/kineviz/nginx-acme-companion.svg)](https://hub.docker.com/r/kineviz/nginx-acme-companion "Click to view the image on Docker Hub")
 
 **acme-companion** is a lightweight companion container for [**nginx-proxy**](https://github.com/nginx-proxy/nginx-proxy).
 
@@ -92,7 +92,7 @@ $ docker run --detach \
     --volume /var/run/docker.sock:/var/run/docker.sock:ro \
     --volume acme:/etc/acme.sh \
     --env "DEFAULT_EMAIL=mail@yourdomain.tld" \
-    nginxproxy/acme-companion
+    kineviz/nginx-acme-companion
 ```
 
 The host docker socket has to be bound inside this container too, this time to `/var/run/docker.sock`.
