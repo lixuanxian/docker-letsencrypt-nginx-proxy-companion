@@ -29,7 +29,7 @@ You can override either default per container the same way you would for a domai
 ```yaml
 services:
   nginx-proxy:
-    image: nginxproxy/nginx-proxy
+    image: nginxproxy/nginx-proxy:1.11.6
     ports:
       - "80:80"
       - "443:443"
@@ -40,7 +40,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
   acme-companion:
-    image: kineviz/nginx-acme-companion
+    image: kineviz/nginx-acme-companion:2.8.2
     volumes_from:
       - nginx-proxy
     volumes:

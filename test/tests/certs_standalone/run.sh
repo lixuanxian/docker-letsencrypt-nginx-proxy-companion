@@ -43,7 +43,7 @@ LETSENCRYPT_single_HOST=('${domains[0]}')
 EOF
 
 # Run an nginx container with a VIRTUAL_HOST set to a subdomain of ${domains[0]} in order to check for
-# this regression : https://github.com/nginx-proxy/acme-companion/issues/674
+# this regression : ./issues/674
 if ! docker run --rm -d \
     --name "${subdomain}" \
     -e "VIRTUAL_HOST=${subdomain}" \

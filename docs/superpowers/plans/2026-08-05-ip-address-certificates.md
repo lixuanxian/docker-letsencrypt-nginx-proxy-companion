@@ -841,7 +841,7 @@ Replace `203.0.113.42` with your host's actual public IP address.
 Current (lines 34-36):
 
 ```markdown
-* Support creation of [Multi-Domain (SAN) Certificates](https://github.com/nginx-proxy/acme-companion/blob/main/docs/Let's-Encrypt-and-ACME.md#multi-domains-certificates).
+* Support creation of [Multi-Domain (SAN) Certificates](./docs/Let's-Encrypt-and-ACME.md#multi-domains-certificates).
 * Support creation of [Wildcard Certificates](https://community.letsencrypt.org/t/acme-v2-production-environment-wildcards/55578) (with `DNS-01` challenge only).
 * Creation of a strong [RFC7919 Diffie-Hellman Group](https://datatracker.ietf.org/doc/html/rfc7919#appendix-A) at startup.
 ```
@@ -849,9 +849,9 @@ Current (lines 34-36):
 Change to:
 
 ```markdown
-* Support creation of [Multi-Domain (SAN) Certificates](https://github.com/nginx-proxy/acme-companion/blob/main/docs/Let's-Encrypt-and-ACME.md#multi-domains-certificates).
+* Support creation of [Multi-Domain (SAN) Certificates](./docs/Let's-Encrypt-and-ACME.md#multi-domains-certificates).
 * Support creation of [Wildcard Certificates](https://community.letsencrypt.org/t/acme-v2-production-environment-wildcards/55578) (with `DNS-01` challenge only).
-* Support creation of [IP address certificates](https://github.com/nginx-proxy/acme-companion/blob/main/docs/IP-address-certificates.md) (short-lived, `HTTP-01` challenge only).
+* Support creation of [IP address certificates](./docs/IP-address-certificates.md) (short-lived, `HTTP-01` challenge only).
 * Creation of a strong [RFC7919 Diffie-Hellman Group](https://datatracker.ietf.org/doc/html/rfc7919#appendix-A) at startup.
 ```
 

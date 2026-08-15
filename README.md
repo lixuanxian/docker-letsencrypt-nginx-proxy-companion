@@ -3,23 +3,23 @@
   <!-- Dark mode -->
   <source
     media="(prefers-color-scheme: dark)"
-    srcset="https://github.com/nginx-proxy/acme-companion/blob/main/docs/img/acme-companion_dark_theme.svg" />
+    srcset="./docs/img/acme-companion_dark_theme.svg" />
   <!-- Light mode -->
   <source
     media="(prefers-color-scheme: light)"
-    srcset="https://github.com/nginx-proxy/acme-companion/blob/main/docs/img/acme-companion_light_theme.svg" />
+    srcset="./docs/img/acme-companion_light_theme.svg" />
   <!-- Fallback for environments without media queries -->
   <img
     alt="ZeroSSL"
-    src="https://github.com/nginx-proxy/acme-companion/blob/main/docs/img/acme-companion_light_theme.svg"
+    src="./docs/img/acme-companion_light_theme.svg"
     height="auto" />
 </picture>
 </a>
 
 # acme-companion
 
-[![Tests](https://github.com/nginx-proxy/acme-companion/actions/workflows/test.yml/badge.svg)](https://github.com/nginx-proxy/acme-companion/actions/workflows/test.yml)
-[![GitHub release](https://img.shields.io/github/release/nginx-proxy/acme-companion.svg)](https://github.com/nginx-proxy/acme-companion/releases)
+[![Tests](./actions/workflows/test.yml/badge.svg)](./actions/workflows/test.yml)
+[![GitHub release](https://img.shields.io/github/release/nginx-proxy/acme-companion.svg)](./releases)
 [![Docker Image Size](https://img.shields.io/docker/image-size/kineviz/nginx-acme-companion?sort=semver)](https://hub.docker.com/r/kineviz/nginx-acme-companion "Click to view the image on Docker Hub")
 [![Docker stars](https://img.shields.io/docker/stars/kineviz/nginx-acme-companion.svg)](https://hub.docker.com/r/kineviz/nginx-acme-companion "Click to view the image on Docker Hub")
 [![Docker pulls](https://img.shields.io/docker/pulls/kineviz/nginx-acme-companion.svg)](https://hub.docker.com/r/kineviz/nginx-acme-companion "Click to view the image on Docker Hub")
@@ -30,26 +30,26 @@ It handles the automated creation, renewal and use of SSL certificates for proxi
 
 ### Features:
 * Automated creation/renewal of Let's Encrypt (or other ACME CAs) certificates using [**acme.sh**](https://github.com/acmesh-official/acme.sh).
-* Let's Encrypt / ACME domain validation through `HTTP-01` (by default) or [`DNS-01`](https://github.com/nginx-proxy/acme-companion/blob/main/docs/Let's-Encrypt-and-ACME.md#dns-01-acme-challenge) challenge.
+* Let's Encrypt / ACME domain validation through `HTTP-01` (by default) or [`DNS-01`](./docs/Let's-Encrypt-and-ACME.md#dns-01-acme-challenge) challenge.
 * Automated update and reload of nginx config on certificate creation/renewal.
-* Support creation of [Multi-Domain (SAN) Certificates](https://github.com/nginx-proxy/acme-companion/blob/main/docs/Let's-Encrypt-and-ACME.md#multi-domains-certificates).
+* Support creation of [Multi-Domain (SAN) Certificates](./docs/Let's-Encrypt-and-ACME.md#multi-domains-certificates).
 * Support creation of [Wildcard Certificates](https://community.letsencrypt.org/t/acme-v2-production-environment-wildcards/55578) (with `DNS-01` challenge only).
-* Support creation of [IP address certificates](https://github.com/nginx-proxy/acme-companion/blob/main/docs/IP-address-certificates.md) (short-lived, `HTTP-01` challenge only).
+* Support creation of [IP address certificates](./docs/IP-address-certificates.md) (short-lived, `HTTP-01` challenge only).
 * Creation of a strong [RFC7919 Diffie-Hellman Group](https://datatracker.ietf.org/doc/html/rfc7919#appendix-A) at startup.
 * Work with all versions of docker.
 
 ### HTTP-01 challenge requirements:
-* Your host **must** be publicly reachable on **both** port [`80`](https://letsencrypt.org/docs/allow-port-80/) and [`443`](https://github.com/nginx-proxy/acme-companion/discussions/873#discussioncomment-1410225).
+* Your host **must** be publicly reachable on **both** port [`80`](https://letsencrypt.org/docs/allow-port-80/) and [`443`](./discussions/873#discussioncomment-1410225).
 * Check your firewall rules and [**do not attempt to block port `80`**](https://letsencrypt.org/docs/allow-port-80/) as that will prevent `HTTP-01` challenges from completing.
 * For the same reason, you can't use nginx-proxy's [`HTTPS_METHOD=nohttp`](https://github.com/nginx-proxy/nginx-proxy#how-ssl-support-works).
 * The (sub)domains you want to issue certificates for must correctly resolve to the host.
 * If your (sub)domains have AAAA records set, the host must be publicly reachable over IPv6 on port `80` and `443`.
 
-If you can't meet these requirements, you can use the `DNS-01` challenge instead. Please refer to the [documentation](https://github.com/nginx-proxy/acme-companion/blob/main/docs/Let's-Encrypt-and-ACME.md#dns-01-acme-challenge) for more information.
+If you can't meet these requirements, you can use the `DNS-01` challenge instead. Please refer to the [documentation](./docs/Let's-Encrypt-and-ACME.md#dns-01-acme-challenge) for more information.
 
 In addition to the above, please ensure that your DNS provider answers correctly to CAA record requests. [If your DNS provider answer with an error, Let's Encrypt won't issue a certificate for your domain](https://letsencrypt.org/docs/caa/). Let's Encrypt do not require that you set a CAA record on your domain, just that your DNS provider answers correctly.
 
-![schema](https://github.com/nginx-proxy/acme-companion/blob/main/schema.png)
+![schema](./schema.png)
 
 ## Basic usage (with the nginx-proxy container)
 
@@ -135,7 +135,7 @@ Repeat [Step 3](#step-3---proxied-containers) for any other container you want t
 
 ## Additional documentation
 
-Please check the [docs section](https://github.com/nginx-proxy/acme-companion/tree/main/docs) and the [environment variables reference](https://github.com/nginx-proxy/acme-companion/blob/main/docs/Environment-variables-reference.md) for more information about the available configuration options.
+Please check the [docs section](./tree/main/docs) and the [environment variables reference](./docs/Environment-variables-reference.md) for more information about the available configuration options.
 
 ## About this repository
 
