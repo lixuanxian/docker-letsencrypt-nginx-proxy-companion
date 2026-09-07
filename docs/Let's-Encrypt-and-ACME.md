@@ -128,7 +128,7 @@ If the ACME CA provides multiple cert chain, you can use the `ACME_PREFERRED_CHA
 
 #### Certificate profile
 
-The `ACME_CERT_PROFILE` environment variable is used to select a specific profile offered by the CA. See for example [the list of profiles offered by Letsencrypt](https://letsencrypt.org/docs/profiles). Note that some profiles might reduce the validity period of the certificate; you might need to adjust the (global) `ACME_RENEW_AFTER` variable or set it per-container to make sure it gets updated in time. If `ACME_HOST` is a public IP address rather than a domain name, this is handled automatically — see [IP address certificates](./IP-address-certificates.md).
+The `ACME_CERT_PROFILE` environment variable is used to select a specific profile offered by the CA. Profile names are CA specific: see [the list of profiles offered by Letsencrypt](https://letsencrypt.org/docs/profiles) and [the one offered by Google Trust Services](./Google-Trust-Services.md#certificate-profiles). Note that some profiles might reduce the validity period of the certificate; you might need to adjust the (global) `ACME_RENEW_AFTER` variable or set it per-container to make sure it gets updated in time. If `ACME_HOST` is a public IP address rather than a domain name, this is handled automatically — see [IP address certificates](./IP-address-certificates.md).
 
 #### Container restart on cert renewal
 
@@ -142,7 +142,7 @@ The `ACME_PRE_HOOK` and `ACME_POST_HOOK` let you use the [`acme.sh` Pre- and Pos
 
 The `ACME_RENEW_AFTER` environment variable can be set on an application container to override the global renewal timing for that specific container's certificate. This is useful when using a CA or a [certificate profile](#certificate-profile) with a different validity period; for example, Buypass certificates have a lifespan of 180 days, and Let's Encrypt's offers [`tlsserver`](https://letsencrypt.org/docs/profiles/#tlsserver) (45 days) and [`shortlived`](https://letsencrypt.org/docs/profiles/#shortlived)  (180 hours) profiles. For example, Buypass certificates have a 180-day lifespan, so you might want to set `ACME_RENEW_AFTER=150` on those containers while keeping the default 60 days for Let's Encrypt certificates on others.
 
-[IP address certificates](./IP-address-certificates.md) use the separate `ACME_RENEW_AFTER_IP` variable (default `3` days) instead of `ACME_RENEW_AFTER`.
+Certificates requested under a `shortlived` profile, which is what [IP address certificates](./IP-address-certificates.md) get on Let's Encrypt, use the separate `ACME_RENEW_AFTER_IP` variable (default `3` days) instead of `ACME_RENEW_AFTER`.
 
 
 ### global (set on acme-companion container)

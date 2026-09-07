@@ -19,3 +19,107 @@ These variables can be set on the proxied containers or directly on the **acme-c
 When registering a new ACME account with EAB, Google Trust Services expects a contact email. Set either `ACME_EMAIL` on the proxied container or `DEFAULT_EMAIL` on the **acme-companion** container so the initial `acme.sh --register-account` call includes it.
 
 If both are unset or blank, **acme-companion** will still try to register the EAB account without an email and log a warning, but Google Trust Services may reject the registration.
+
+### Example
+
+```yaml
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:1.11.6
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  acme-companion:
+    image: kineviz/nginx-acme-companion:2.8.2
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs
+      - acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - DEFAULT_EMAIL=mail@yourdomain.tld
+      - ACME_CA_URI=https://dv.acme-v02.api.pki.goog/directory
+      - ACME_EAB_KID=your-eab-key-id
+      - ACME_EAB_HMAC_KEY=your-eab-hmac-key
+
+  webapp:
+    image: yourwebapp
+    environment:
+      - VIRTUAL_HOST=yourdomain.tld
+      - ACME_HOST=yourdomain.tld
+
+volumes:
+  certs:
+  vhost:
+  html:
+  acme:
+```
+
+Keep the EAB credentials out of the compose file itself in production: pass them through an `.env` file, a secret manager, or your orchestrator's own secret mechanism.
+
+### Certificate profiles
+
+Google Trust Services implements the [ACME profiles extension](https://developers.google.com/public-key-infrastructure/profiles) and offers two profiles:
+
+* `standard` (the default): certificates compatible with a wide range of browsers and clients.
+* `minimal`: a smaller served chain, issued from an ECC chain, with `subject:commonName`, the SKID extension, `basicConstraints` and the `keyEncipherment` key usage omitted.
+
+Select one with [`ACME_CERT_PROFILE`](./Let's-Encrypt-and-ACME.md#certificate-profile), globally on the **acme-companion** container or per proxied container. Let's Encrypt's profile names (`classic`, `tlsserver`, `shortlived`) don't exist at Google Trust Services and will be rejected.
+
+### IP address certificates
+
+Google Trust Services [issues certificates containing an IP address in the SAN extension](https://developers.google.com/public-key-infrastructure/faq/ip-certificates). Request one exactly as you would with any other CA — set `ACME_HOST` to a public IP address instead of a domain name — and see [IP address certificates](./IP-address-certificates.md) for the rules that apply to all CAs.
+
+Two things differ from Let's Encrypt:
+
+* Google Trust Services issues IP address certificates under its regular profile, not under a dedicated short-lived one. **acme-companion** therefore doesn't request Let's Encrypt's `shortlived` profile when the CA is Google Trust Services, and keeps the regular `ACME_RENEW_AFTER` (60 days) renewal threshold instead of the 3 days used for short-lived certificates.
+* The account still needs EAB credentials, just like for a domain certificate.
+
+```yaml
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:1.11.6
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  acme-companion:
+    image: kineviz/nginx-acme-companion:2.8.2
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs
+      - acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - DEFAULT_EMAIL=mail@yourdomain.tld
+      - ACME_CA_URI=https://dv.acme-v02.api.pki.goog/directory
+      - ACME_EAB_KID=your-eab-key-id
+      - ACME_EAB_HMAC_KEY=your-eab-hmac-key
+
+  webapp:
+    image: yourwebapp
+    environment:
+      - VIRTUAL_HOST=203.0.113.42
+      - ACME_HOST=203.0.113.42
+
+volumes:
+  certs:
+  vhost:
+  html:
+  acme:
+```
+
+Replace `203.0.113.42` with your host's actual public IP address, which must be reachable on port `80` for the `HTTP-01` challenge.

@@ -10,11 +10,12 @@
 | `ACME_CERT_PROFILE` | CA default | — | [Let's Encrypt and ACME › Default certificate profile](./Let's-Encrypt-and-ACME.md#default-certificate-profile) |
 | `ACME_EAB_KID` | — | — | [Zero SSL](./Zero-SSL.md) · [Google Trust Services](./Google-Trust-Services.md) |
 | `ACME_EAB_HMAC_KEY` | — | — | [Zero SSL](./Zero-SSL.md) · [Google Trust Services](./Google-Trust-Services.md) |
+| `ACME_IP_CERT_PROFILE` | `auto` (per-CA) | — | [IP address certificates › Automatic defaults](./IP-address-certificates.md#automatic-defaults) |
 | `ACME_HTTP_CHALLENGE_LOCATION` | `false` | — | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) |
 | `ACME_POST_HOOK` | — | — | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) · [Hooks](./Hooks.md) |
 | `ACME_PRE_HOOK` | — | — | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) · [Hooks](./Hooks.md) |
 | `ACME_RENEW_AFTER` | `60` (days) | `DEFAULT_RENEW` ⚠️ deprecated | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) |
-| `ACME_RENEW_AFTER_IP` | `3` (days) | — | [IP address certificates › Automatic defaults](./IP-address-certificates.md#automatic-defaults) |
+| `ACME_RENEW_AFTER_IP` | `3` (days) | — | [IP address certificates › Automatic defaults](./IP-address-certificates.md#automatic-defaults) (short lived profiles only) |
 | `CA_BUNDLE` | Alpine trust store | — | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) |
 | `CERTS_UPDATE_INTERVAL` | `3600` (seconds) | — | [Container configuration](./Container-configuration.md#optional-container-environment-variables-for-custom-configuration) |
 | `CREATE_DEFAULT_CERTIFICATE` | `false` | — | [Let's Encrypt and ACME › Self signed default certificate](./Let's-Encrypt-and-ACME.md#self-signed-default-certificate) |

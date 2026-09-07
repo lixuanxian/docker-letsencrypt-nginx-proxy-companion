@@ -34,7 +34,7 @@ It handles the automated creation, renewal and use of SSL certificates for proxi
 * Automated update and reload of nginx config on certificate creation/renewal.
 * Support creation of [Multi-Domain (SAN) Certificates](./docs/Let's-Encrypt-and-ACME.md#multi-domains-certificates).
 * Support creation of [Wildcard Certificates](https://community.letsencrypt.org/t/acme-v2-production-environment-wildcards/55578) (with `DNS-01` challenge only).
-* Support creation of [IP address certificates](./docs/IP-address-certificates.md) (short-lived, `HTTP-01` challenge only).
+* Support creation of [IP address certificates](./docs/IP-address-certificates.md) (`HTTP-01` challenge only) from any CA that issues them, such as Let's Encrypt (short lived) and [Google Trust Services](./docs/Google-Trust-Services.md#ip-address-certificates).
 * Creation of a strong [RFC7919 Diffie-Hellman Group](https://datatracker.ietf.org/doc/html/rfc7919#appendix-A) at startup.
 * Work with all versions of docker.
 
