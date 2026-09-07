@@ -35,10 +35,11 @@ if [[ "${ACME_CA}" == 'pebble' && "${PEBBLE_CONFIG}" == 'pebble-config-eab.json'
 	)
 fi
 
-# The cert_profiles and certs_ip tests require Pebble multiple profiles support from the default Pebble config
+# The cert_profiles, certs_ip and certs_ip_ca_profile tests require Pebble multiple profiles support from the default Pebble config
 if [[ "${ACME_CA}" == 'pebble' && "${PEBBLE_CONFIG}" == 'pebble-config.json' ]]; then
 	globalTests+=(
 		cert_profiles
 		certs_ip
+		certs_ip_ca_profile
 	)
 fi

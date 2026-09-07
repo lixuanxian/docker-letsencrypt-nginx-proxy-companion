@@ -10,6 +10,7 @@ DEFAULT_KEY_SIZE="${DEFAULT_KEY_SIZE:-4096}"
 RENEW_PRIVATE_KEYS="$(lc "${RENEW_PRIVATE_KEYS:-true}")"
 ACME_RENEW_AFTER="${ACME_RENEW_AFTER:-60}"
 ACME_RENEW_AFTER_IP="${ACME_RENEW_AFTER_IP:-3}"
+ACME_IP_CERT_PROFILE="${ACME_IP_CERT_PROFILE:-auto}"
 
 # Backward compatibility environment variable
 REUSE_PRIVATE_KEYS="$(lc "${REUSE_PRIVATE_KEYS:-false}")"
@@ -175,9 +176,9 @@ function update_cert {
         wildcard_certificate='true'
     fi
 
-    # Classify this certificate's hosts: Let's Encrypt IP address
-    # certificates have different requirements (HTTP-01/TLS-ALPN-01 only,
-    # shortlived profile) than domain certificates, and can't mix the two.
+    # Classify this certificate's hosts: IP address certificates have
+    # different requirements (HTTP-01/TLS-ALPN-01 only, and on some CAs a
+    # specific profile) than domain certificates, and can't mix the two.
     local -a ip_hosts=() dns_hosts=()
     local host
     for host in "${hosts_array[@]}"; do
@@ -241,7 +242,7 @@ function update_cert {
         params_issue_arr+=(--webroot /usr/share/nginx/html)
     elif [[ "${acme_challenge}" == "DNS-01" ]]; then
         if [[ "${ip_certificate}" == 'true' ]]; then
-            echo "Error: IP address certificates (${base_domain}) require the HTTP-01 or TLS-ALPN-01 challenge; DNS-01 is not supported by Let's Encrypt for IP identifiers."
+            echo "Error: IP address certificates (${base_domain}) require the HTTP-01 or TLS-ALPN-01 challenge; DNS-01 is not supported for IP identifiers."
             return 1
         fi
         # DNS-01 challenge
@@ -489,16 +490,33 @@ function update_cert {
         return 1
     fi
 
+    local cert_profile=''
     local -n acme_cert_profile="ACME_${cid}_CERT_PROFILE"
     if [[ -n "${acme_cert_profile}" ]]; then
         # Use per-container certificate profile
-        params_issue_arr+=(--cert-profile "${acme_cert_profile}")
+        cert_profile="${acme_cert_profile}"
     elif [[ -n ${ACME_CERT_PROFILE// } ]]; then
         # Use default certificate profile
-        params_issue_arr+=(--cert-profile "${ACME_CERT_PROFILE}")
+        cert_profile="${ACME_CERT_PROFILE}"
     elif [[ "${ip_certificate}" == 'true' ]]; then
-        # Let's Encrypt requires the shortlived profile for IP address certificates
-        params_issue_arr+=(--cert-profile shortlived)
+        # IP address certificates: request whichever profile this CA requires
+        # for them, if any. Let's Encrypt only issues them under 'shortlived',
+        # while Google Trust Services issues them under its default profile and
+        # would reject 'shortlived' as unknown.
+        case "$(lc "${ACME_IP_CERT_PROFILE}")" in
+            'auto')
+                cert_profile="$(ca_default_ip_cert_profile "${acme_ca_uri}")"
+                ;;
+            'none')
+                cert_profile=''
+                ;;
+            *)
+                cert_profile="${ACME_IP_CERT_PROFILE}"
+                ;;
+        esac
+    fi
+    if [[ -n "${cert_profile// }" ]]; then
+        params_issue_arr+=(--cert-profile "${cert_profile}")
     fi
 
     # acme.sh pre and post hooks
@@ -551,7 +569,9 @@ function update_cert {
     # Allow to override day to renew cert (per-container or global)
     local -n renew_after="ACME_${cid}_RENEW_AFTER"
     if [[ -z "${renew_after}" ]] || [[ ! "${renew_after}" =~ ^[0-9]+$ ]]; then
-        if [[ "${ip_certificate}" == 'true' ]]; then
+        if [[ "${cert_profile}" == 'shortlived' ]]; then
+            # Certificates issued under a shortlived profile only live for a
+            # few days, so the 60 days default would never renew them in time.
             renew_after="${ACME_RENEW_AFTER_IP}"
         else
             renew_after="${ACME_RENEW_AFTER}"

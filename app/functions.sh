@@ -48,6 +48,33 @@ function is_ip_address {
 	[[ "${host}" == *:* && "${host}" =~ ^[0-9A-Fa-f:]+$ ]]
 }
 
+function ca_default_ip_cert_profile {
+	# Certificate profile automatically requested for an IP address
+	# certificate on a given ACME CA, when the user didn't pick one.
+	#
+	# Let's Encrypt only issues IP address certificates under its
+	# 'shortlived' profile, so request it by default. Other CAs issue them
+	# under their own default profile and would reject 'shortlived' as an
+	# unknown profile, so request nothing and let the CA decide. An empty
+	# output means "don't pass --cert-profile to acme.sh at all".
+	local -r ca_uri="${1?missing ca_uri argument}"
+	case "${ca_uri}" in
+		*'.pki.goog/'*)
+			# Google Trust Services: the profiles it offers are
+			# 'standard' (default) and 'minimal'.
+			# https://developers.google.com/public-key-infrastructure/profiles
+			echo ''
+			;;
+		*'acme.zerossl.com'*)
+			# ZeroSSL doesn't implement the ACME profiles extension.
+			echo ''
+			;;
+		*)
+			echo 'shortlived'
+			;;
+	esac
+}
+
 [[ -z "${VHOST_DIR:-}" ]] && \
  declare -r VHOST_DIR=/etc/nginx/vhost.d
 [[ -z "${START_HEADER:-}" ]] && \
