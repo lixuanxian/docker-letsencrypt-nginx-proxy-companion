@@ -20,7 +20,10 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-for domain in le1.wtf le2.wtf le3.wtf le4.wtf lim.it; do
+# 10.30.50.1 is the acme_net gateway address the IP address certificate tests
+# request a certificate for. Without it here their artifacts would survive into
+# the next test, whose wait_for_symlink would then pass on a stale symlink.
+for domain in le1.wtf le2.wtf le3.wtf le4.wtf lim.it 10.30.50.1; do
     for folder in "/etc/nginx/certs/${domain}" "/etc/acme.sh/default/${domain}" "/etc/acme.sh/default/${domain}_ecc" "/etc/acme.sh/contact@${domain}" "/etc/acme.sh/legacy-contact@${domain}"; do
         [[ -d "${folder}" ]] && rm -rf "${folder}"
     done
