@@ -8,11 +8,22 @@ Using Google Trust Services through an ACME client, like in this container, allo
 
 Google Trust Services support is activated when the `ACME_CA_URI` environment variable is set to the Google Trust Services ACME endpoint (`https://dv.acme-v02.api.pki.goog/directory`).
 
+Google Trust Services also runs a staging endpoint, `https://dv.acme-v02.test-api.pki.goog/directory`, which issues untrusted test certificates. Point `ACME_CA_URI` at it while setting things up so that failed attempts don't consume your production quota. Note that `LETSENCRYPT_TEST=true` selects Let's Encrypt's staging endpoint, not this one.
+
 ### Account
 
 Google Trust Services requires the use of an externally bound account. First create a [Google Trust Services account](https://cloud.google.com/certificate-manager/docs/public-ca-tutorial#request-key-hmac):
 
 - provide the pre-generated [EAB credentials](https://tools.ietf.org/html/rfc8555#section-7.3.4) using the `ACME_EAB_KID` and `ACME_EAB_HMAC_KEY` environment variables.
+
+With the Google Cloud CLI, that is:
+
+```console
+$ gcloud services enable publicca.googleapis.com
+$ gcloud publicca external-account-keys create
+```
+
+The command returns a `keyId` (use it as `ACME_EAB_KID`) and a `b64MacKey` (use it as `ACME_EAB_HMAC_KEY`). Each set of credentials registers a single ACME account and must be used within 7 days of being created.
 
 These variables can be set on the proxied containers or directly on the **acme-companion** container.
 
